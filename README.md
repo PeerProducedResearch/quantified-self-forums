@@ -4,6 +4,10 @@ Self-Quantified is a Community website of self-trackers, self-researchers intere
 
 - Posts by categories with various tags; ‘data’, ‘tools’, ‘diet’, ‘conference’, ‘food’…
 
+<p align-"center">
+<img src="./qs_wordcloud.png" alt="QS wordcloud" width="700">
+</p>  
+
 ## Expected Results
 - The aim of this project is working to understand the community forum by conducting Data Analysis and Natural Language Processing (NLP) of the community’ interactions.
 - Providing transparent analysis of the human behaviour in communication and their patterns of networking to improve occurring and future projects in community and personal science.
