@@ -5,7 +5,7 @@ Self-Quantified is a Community website of self-trackers, self-researchers intere
 - Posts by categories with various tags; ‘data’, ‘tools’, ‘diet’, ‘conference’, ‘food’…
 
 <p align-"center">
-<img src="./qs_wordcloud.png" alt="QS wordcloud" width="700">
+<img src="./Data_Viz/qs_wordcloud.png" alt="QS wordcloud" width="700">
 </p>  
 
 ## Expected Results
