@@ -8,6 +8,11 @@ header = st.beta_container()
 dataset = st.beta_container()
 features = st.beta_container()
 
+@st.cache
+def get_data(filename):
+    qs_data = pd.read_csv(filename)
+    return qs_data
+
 with header:
     st.title("NLP for Quantified-Self Forum")
     st.subheader("This project will give an overview of Forum's interactions and offer an interactive dashboard"
@@ -17,15 +22,19 @@ with dataset:
     st.header('QS forum dataset')
     st.text('The dataset was extracted from QS website using Python to parse the JSON files')
 
-    qs_data = pd.read_csv('datasets/global_df.csv')
+    qs_data = get_data('/home/criuser/nlp/a_Quantified_Self_Project/global_df.csv')
     st.write(qs_data.head())
 
-    st.subheader('Distribution of Monthly created docs')
-    docs_list = pd.DataFrame(qs_data['date_month'].value_counts())
+    st.subheader('Distribution of Yearly Created Posts')
+    docs_list = pd.DataFrame(qs_data['date_year'].value_counts())
     st.bar_chart(docs_list)
 
 with features:
     st.header('Features created')
+
+    st.markdown('* **first feature:** NER')
+    st.markdown('* **second feature:** Topic Modelling')
+    st.markdown('* **Third feature:** Social Network Analysis')
 
 
 def main():
