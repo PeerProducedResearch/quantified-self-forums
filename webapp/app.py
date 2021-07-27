@@ -54,7 +54,7 @@ with interactive:
     st.write(fig)
 
     # LINE CHART for Word occurence over time
-    words_freq = get_data('/home/criuser/nlp/a_Quantified_Self_Project/words_df.csv')
+    words_freq = get_data('https://raw.githubusercontent.com/KaoutarLanjri/quantified-self-forums/main/datasets/words_df.csv')
 
     fig = px.line(words_freq, x=words_freq.creation_year, y=words_freq.columns[0:30], title="Word Dispersion over time 2011 to 2021")
     st.write(fig)
