@@ -1,8 +1,20 @@
+import pyLDAvis
 import streamlit as st
-import spacy
 import pandas as pd
 import plotly.graph_objects as go
 import plotly_express as px
+import nltk
+from gensim import corpora
+from nltk import pos_tag, word_tokenize
+
+import spacy
+from sklearn.decomposition import LatentDirichletAllocation
+from sklearn.feature_extraction.text import CountVectorizer
+from spacy import displacy
+nlp = spacy.load("en_core_web_sm")
+
+from sklearn.model_selection import GridSearchCV
+
 
 # containers
 header = st.beta_container()
@@ -14,14 +26,20 @@ interactive = st.beta_container()
 # data sets functions
 @st.cache
 def get_data(filename):
-    qs_data = pd.read_csv(filename)
-    return qs_data
+    data = pd.read_csv(filename)
+    return data
 
 
 with header:
     st.title("NLP for Quantified-Self Forum")
     st.subheader("This project will give an overview of Forum's interactions and offer an interactive dashboard"
                  " to discover topics discussed about")
+
+    st.image('Data_Viz/qs_wordcloud.png')
+    st.sidebar.title("Side Menu")
+    st.sidebar.write("-----------")
+    st.sidebar.write("**Visualizations:** ")
+
 
 with dataset:
     st.header('QS forum dataset')
@@ -60,6 +78,9 @@ with interactive:
 
     fig = px.line(words_freq, x=words_freq.creation_year, y=words_freq.columns[0:30],
                   title="Word Dispersion over time 2011 to 2021")
+
+    fig.update_xaxes(type='category')
+
     st.write(fig)
 # 2021
     words21_freq = get_data(
@@ -67,20 +88,41 @@ with interactive:
 
     fig = px.line(words21_freq, x=words21_freq.creation_date, y=words21_freq.columns[0:30],
                   title="Word Dispersion over the year 2021")
+
+    fig.update_xaxes(type='category')
+
     st.write(fig)
 
-def main():
-    """NLP APP"""
 
+    # SIDE BARS
 
-if st.checkbox("Documents Overview"):
-    st.subheader("N of Docs created overtime")
+TM = st.sidebar.checkbox('Topic Modelling')
+NER = st.sidebar.checkbox('NER: Named Entity Recognition')
 
-    # NER
+#chunks = nltk.ne_chunk(pos_tags, binary=True)
 
-    #
+# TOPIC MODELLING
+data1 = data.copy()
+df_LDA = data1(
+        'https://raw.githubusercontent.com/KaoutarLanjri/quantified-self-forums/main/datasets/df_LDA.csv'
+    )
 
-    #
+df_LDA['no_sw_LDA_text'] = df_LDA['no_sw_LDA_text'].astype('str')
 
-if __name__ == '__main__':
-    main()
+# Tokenize Text
+def tokenize_text(text):
+    filtered_text = []
+    words = word_tokenize(text)
+
+    for word in words:
+        filtered_text.append(word)
+
+    return filtered_text
+
+df_LDA['no_sw_LDA_text'] = df_LDA['no_sw_LDA_text'].dropna(inplace=True)
+
+tokens = df_LDA['no_sw_LDA_text'].apply(tokenize_text)
+
+dictionary = corpora.Dictionary(tokens)
+
+#dictionary = corpora.Dictionary(df_LDA.token_NN_text)
