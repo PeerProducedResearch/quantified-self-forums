@@ -7,7 +7,9 @@ import plotly.graph_objects as go
 header = st.beta_container()
 dataset = st.beta_container()
 features = st.beta_container()
+interactive = st.beta_container()
 
+# to make webapp quicker
 @st.cache
 def get_data(filename):
     qs_data = pd.read_csv(filename)
@@ -22,7 +24,7 @@ with dataset:
     st.header('QS forum dataset')
     st.text('The dataset was extracted from QS website using Python to parse the JSON files')
 
-    qs_data = get_data('/home/criuser/nlp/a_Quantified_Self_Project/global_df.csv')
+    qs_data = get_data('https://media.githubusercontent.com/media/KaoutarLanjri/large_files/master/global_df.csv')
     st.write(qs_data.head())
 
     st.subheader('Distribution of Yearly Created Posts')
@@ -36,6 +38,17 @@ with features:
     st.markdown('* **second feature:** Topic Modelling')
     st.markdown('* **Third feature:** Social Network Analysis')
 
+with interactive:
+    st.title('Closer look into the data')
+
+    fig = go.Figure(data=go.Table
+        (header=dict(values=list(qs_data[['topic_id', 'creation_date', 'lemmat_text']].columns),
+        fill_color='#FD8E72',
+        align='center'),
+    cells=dict(values=[qs_data.topic_id, qs_data.creation_date, qs_data.lemmat_text]
+               )))
+    #fig.update_layout()
+    st.write(fig)
 
 def main():
     """NLP APP"""
@@ -52,12 +65,3 @@ if st.checkbox("Documents Overview"):
 
 if __name__ == '__main__':
     main()
-# NLP packages
-
-def entity_analyzer(my_text):
-    nlp = spacy.load('en')
-    docx = nlp(my_text)
-    entities = [(entity.text, entity.label_) for entity in docx]
-    return entities
-
-
