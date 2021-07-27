@@ -2,6 +2,7 @@ import streamlit as st
 import spacy
 import pandas as pd
 import plotly.graph_objects as go
+import plotly_express as px
 
 # containers
 header = st.beta_container()
@@ -9,11 +10,13 @@ dataset = st.beta_container()
 features = st.beta_container()
 interactive = st.beta_container()
 
-# to make webapp quicker
+
+# data sets functions
 @st.cache
 def get_data(filename):
     qs_data = pd.read_csv(filename)
     return qs_data
+
 
 with header:
     st.title("NLP for Quantified-Self Forum")
@@ -41,13 +44,18 @@ with features:
 with interactive:
     st.title('Closer look into the data')
 
-    fig = go.Figure(data=go.Table
-        (header=dict(values=list(qs_data[['topic_id', 'creation_date', 'lemmat_text']].columns),
-        fill_color='#FD8E72',
-        align='center'),
-    cells=dict(values=[qs_data.topic_id, qs_data.creation_date, qs_data.lemmat_text]
-               )))
-    #fig.update_layout()
+    fig = go.Figure(data=go.Table(
+                columnwidth=[1, 1, 3, 3],
+                header=dict(values=list(qs_data[['topic_id', 'creation_date', 'noHTML_text', 'lemmat_text']].columns),
+                fill_color='#FD8E72',
+                align='center'),
+                cells=dict(values=[qs_data.topic_id, qs_data.creation_date, qs_data.noHTML_text, qs_data.lemmat_text])))
+    fig.update_layout(margin=dict(l=5, r=5, b=10, t=10))
+    st.write(fig)
+
+    # LINE CHART for Word occurence over time
+    words_freq = get_data('https://raw.githubusercontent.com/KaoutarLanjri/quantified-self-forums/main/datasets/words_df.csv')
+    fig = px.line(words_freq, x=words_freq.index, y=words_freq.columns[0:30], title="Word Dispersion over time 2011 to 2021")
     st.write(fig)
 
 def main():
