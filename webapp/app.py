@@ -58,13 +58,14 @@ with interactive:
     words_freq = get_data(
         'https://raw.githubusercontent.com/KaoutarLanjri/quantified-self-forums/main/datasets/words_df.csv')
 
-    fig = px.line(words_freq, x=words_freq.creation_year, y=words_freq.columns[0:30], title="Word Dispersion over time 2011 to 2021")
+    fig = px.line(words_freq, x=words_freq.creation_year, y=words_freq.columns[0:30],
+                  title="Word Dispersion over time 2011 to 2021")
     st.write(fig)
 # 2021
     words21_freq = get_data(
         'https://raw.githubusercontent.com/KaoutarLanjri/quantified-self-forums/main/datasets/words_df_2021.csv')
 
-    fig = px.line(words21_freq, x=words21_freq.creation_year, y=words21_freq.columns[0:30],
+    fig = px.line(words21_freq, x=words21_freq.creation_date, y=words21_freq.columns[0:30],
                   title="Word Dispersion over the year 2021")
     st.write(fig)
 
