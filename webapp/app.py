@@ -107,40 +107,4 @@ df['no_sw_LDA_text'] = df['no_sw_LDA_text'].astype('str')
 
 df = df.groupby(['topic_id'], as_index = False).agg({('no_sw_LDA_text'): ' '.join})
 
-df['token_NN_text'] = df.no_sw_LDA_text.apply(lambda x: tokenize_text(x))
-
-vectorizer = CountVectorizer(analyzer='word',
-                             min_df=10,                        # minimum reqd occurences of a word
-                             stop_words='english',             # remove stop words
-                             lowercase=True,                   # convert all words to lowercase
-                             token_pattern='[a-zA-Z0-9]{3,}',  # num chars > 3
-                             # max_features=50000,             # max number of uniq words
-                            )
-
-data_vectorized = vectorizer.fit_transform(df.no_sw_LDA_text)
-
-lda_model = LatentDirichletAllocation(n_components=20,
-                                      max_iter=10,               # Max learning iterations
-                                      learning_method='online',
-                                      random_state=100,          # Random state
-                                      batch_size=128,            # n docs in each learning iter
-                                      evaluate_every = -1,       # compute perplexity every n iters, default: Don't
-                                      n_jobs = -1,               # Use all available CPUs
-                                     )
-lda_output = lda_model.fit_transform(data_vectorized)
-
-
-print(lda_model)  # Model attributes
-def prepare_training_data(docs):
-    id2word = corpora.Dictionary(docs)
-    corpus = [id2word.doc2bow(doc) for doc in docs]
-    return id2word, corpus
-
-
-def train_model(docs, num_topics: int = 10, per_word_topics: bool = True):
-    id2word, corpus = prepare_training_data(docs)
-    model = gensim.models.LdaModel(corpus=corpus, id2word=id2word, num_topics=num_topics, per_word_topics=per_word_topics)
-    return model
-
-#dictionary = corpora.Dictionary(df_LDA.token_NN_text)
 
