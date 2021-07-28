@@ -130,9 +130,6 @@ lda_model = LatentDirichletAllocation(n_components=20,
 lda_output = lda_model.fit_transform(data_vectorized)
 
 
-html_string = ... # load your HTML from disk here
-st.html(html_string)
-
 print(lda_model)  # Model attributes
 def prepare_training_data(docs):
     id2word = corpora.Dictionary(docs)
