@@ -13,7 +13,6 @@ import spacy
 from sklearn.decomposition import LatentDirichletAllocation
 from sklearn.feature_extraction.text import CountVectorizer
 from spacy import displacy
-nlp = spacy.load("en_core_web_sm")
 
 
 # containers
