@@ -1,27 +1,30 @@
-import pyLDAvis
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 import plotly_express as px
-import nltk
-from gensim import corpora
-from nltk import pos_tag, word_tokenize
 
+from gensim import corpora
+import gensim
+import pyLDAvis
+import nltk
+
+from nltk import pos_tag, word_tokenize
 import spacy
 from sklearn.decomposition import LatentDirichletAllocation
 from sklearn.feature_extraction.text import CountVectorizer
 from spacy import displacy
 nlp = spacy.load("en_core_web_sm")
 
-from sklearn.model_selection import GridSearchCV
-
 
 # containers
 header = st.beta_container()
 dataset = st.beta_container()
-features = st.beta_container()
 interactive = st.beta_container()
 
+
+#SIDE BARS
+TM = st.sidebar.checkbox('Topic Modelling')
+NER = st.sidebar.checkbox('NER: Named Entity Recognition')
 
 # data sets functions
 @st.cache
@@ -52,13 +55,6 @@ with dataset:
     docs_list = pd.DataFrame(qs_data['date_year'].value_counts())
     st.bar_chart(docs_list)
 
-with features:
-    st.header('Features created')
-
-    st.markdown('* **first feature:** NER')
-    st.markdown('* **second feature:** Topic Modelling')
-    st.markdown('* **Third feature:** Social Network Analysis')
-
 with interactive:
     st.title('Closer look into the data')
 
@@ -68,10 +64,12 @@ with interactive:
                 fill_color='#FD8E72',
                 align='center'),
                 cells=dict(values=[qs_data.topic_id, qs_data.creation_date, qs_data.noHTML_text, qs_data.lemmat_text])))
+
     fig.update_layout(margin=dict(l=5, r=5, b=10, t=10))
     st.write(fig)
 
-    # LINE CHART for Word occurence over time
+    # LINE CHART for Word occurence over time*
+
 # ALL TIME
     words_freq = get_data(
         'https://raw.githubusercontent.com/KaoutarLanjri/quantified-self-forums/main/datasets/words_df.csv')
@@ -80,8 +78,8 @@ with interactive:
                   title="Word Dispersion over time 2011 to 2021")
 
     fig.update_xaxes(type='category')
-
     st.write(fig)
+
 # 2021
     words21_freq = get_data(
         'https://raw.githubusercontent.com/KaoutarLanjri/quantified-self-forums/main/datasets/words_df_2021.csv')
@@ -90,24 +88,9 @@ with interactive:
                   title="Word Dispersion over the year 2021")
 
     fig.update_xaxes(type='category')
-
     st.write(fig)
 
-
-    # SIDE BARS
-
-TM = st.sidebar.checkbox('Topic Modelling')
-NER = st.sidebar.checkbox('NER: Named Entity Recognition')
-
-#chunks = nltk.ne_chunk(pos_tags, binary=True)
-
-# TOPIC MODELLING
-data1 = data.copy()
-df_LDA = data1(
-        'https://raw.githubusercontent.com/KaoutarLanjri/quantified-self-forums/main/datasets/df_LDA.csv'
-    )
-
-df_LDA['no_sw_LDA_text'] = df_LDA['no_sw_LDA_text'].astype('str')
+    # TOPIC MODELLING
 
 # Tokenize Text
 def tokenize_text(text):
@@ -116,13 +99,51 @@ def tokenize_text(text):
 
     for word in words:
         filtered_text.append(word)
-
     return filtered_text
+#
+df = qs_data.copy()
 
-df_LDA['no_sw_LDA_text'] = df_LDA['no_sw_LDA_text'].dropna(inplace=True)
+df['no_sw_LDA_text'] = df['no_sw_LDA_text'].astype('str')
 
-tokens = df_LDA['no_sw_LDA_text'].apply(tokenize_text)
+df = df.groupby(['topic_id'], as_index = False).agg({('no_sw_LDA_text'): ' '.join})
 
-dictionary = corpora.Dictionary(tokens)
+df['token_NN_text'] = df.no_sw_LDA_text.apply(lambda x: tokenize_text(x))
+
+vectorizer = CountVectorizer(analyzer='word',
+                             min_df=10,                        # minimum reqd occurences of a word
+                             stop_words='english',             # remove stop words
+                             lowercase=True,                   # convert all words to lowercase
+                             token_pattern='[a-zA-Z0-9]{3,}',  # num chars > 3
+                             # max_features=50000,             # max number of uniq words
+                            )
+
+data_vectorized = vectorizer.fit_transform(df.no_sw_LDA_text)
+
+lda_model = LatentDirichletAllocation(n_components=20,
+                                      max_iter=10,               # Max learning iterations
+                                      learning_method='online',
+                                      random_state=100,          # Random state
+                                      batch_size=128,            # n docs in each learning iter
+                                      evaluate_every = -1,       # compute perplexity every n iters, default: Don't
+                                      n_jobs = -1,               # Use all available CPUs
+                                     )
+lda_output = lda_model.fit_transform(data_vectorized)
+
+
+html_string = ... # load your HTML from disk here
+st.html(html_string)
+
+print(lda_model)  # Model attributes
+def prepare_training_data(docs):
+    id2word = corpora.Dictionary(docs)
+    corpus = [id2word.doc2bow(doc) for doc in docs]
+    return id2word, corpus
+
+
+def train_model(docs, num_topics: int = 10, per_word_topics: bool = True):
+    id2word, corpus = prepare_training_data(docs)
+    model = gensim.models.LdaModel(corpus=corpus, id2word=id2word, num_topics=num_topics, per_word_topics=per_word_topics)
+    return model
 
 #dictionary = corpora.Dictionary(df_LDA.token_NN_text)
+

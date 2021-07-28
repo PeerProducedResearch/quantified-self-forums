@@ -67,3 +67,17 @@ with interactive:
     from streamlit import components
 
     components.v1.html(html_string, width=1300, height=800, scrolling=True)
+
+
+    _______
+    features = st.beta_container()
+
+    with features:
+        st.header('Features created')
+
+        st.markdown('* **first feature:** NER')
+        st.markdown('* **second feature:** Topic Modelling')
+        st.markdown('* **Third feature:** Social Network Analysis')
+
+
+        --------
