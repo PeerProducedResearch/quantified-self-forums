@@ -7,6 +7,7 @@ from gensim import corpora
 import gensim
 import pyLDAvis
 import nltk
+nltk.download('punkt')
 
 from nltk import pos_tag, word_tokenize
 import spacy
@@ -89,8 +90,12 @@ with interactive:
     fig.update_xaxes(type='category')
     st.write(fig)
 
-   # st.image('Data_Viz/coherence_score_chart.png')
-    # TOPIC MODELLING
+    st.header('Topic Modelling')
+    st.image('Data_Viz/coherence_score_chart.png')
+    st.text('The improvement stops significantly improving after 9 topics')
+
+# TOPIC MODELLING
+
 
 # Tokenize Text
 def tokenize_text(text):
@@ -105,15 +110,10 @@ df = qs_data.copy()
 
 df['no_sw_LDA_text'] = df['no_sw_LDA_text'].astype('str')
 
-df = df.groupby(['topic_id'], as_index = False).agg({('no_sw_LDA_text'): ' '.join})
+df = df.groupby(['topic_id'], as_index=False).agg({('no_sw_LDA_text'): ' '.join})
 
 df['token_NN_text'] = df.no_sw_LDA_text.apply(lambda x: tokenize_text(x))
 
-
-st.subheader("LDA has two hyperparamters, alpha and beta (alpha and eta in gemsim) -  a higher alpha means each text will" \
-" be represented by more topics (so naturally a lower alpha means each text will be represented by less topics)." \
-" A high eta means each topic is represented by more words, and a low eta means each topic is represented by less" \
-" words - so with a low eta you would get less overlap between topics.")
 
 # FUNCTIONS PREPROCESSING FOR TOPIC MODELLING
 
@@ -138,11 +138,11 @@ trigram_scores = finder.score_ngrams(trigram_measures.pmi)
 
 bigram_pmi = pd.DataFrame(bigram_scores)
 bigram_pmi.columns = ['bigram', 'pmi']
-bigram_pmi.sort_values(by='pmi', axis = 0, ascending = False, inplace = True)
+bigram_pmi.sort_values(by='pmi', axis=0, ascending=False, inplace=True)
 
 trigram_pmi = pd.DataFrame(trigram_scores)
 trigram_pmi.columns = ['trigram', 'pmi']
-trigram_pmi.sort_values(by='pmi', axis = 0, ascending = False, inplace = True)
+trigram_pmi.sort_values(by='pmi', axis=0, ascending=False, inplace = True)
 
 # Filter for bigrams with only noun-type structures
 def bigram_filter(bigram):
