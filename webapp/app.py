@@ -100,7 +100,7 @@ with interactive:
               'Check the topics keywords table')
 
     st.image('Data_Viz/topic_model_words.png')
-
+    st.text('plot loading...')
 # Tokenize Text
 def tokenize_text(text):
     filtered_text = []
