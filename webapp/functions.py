@@ -40,3 +40,34 @@ def sent_to_words(sentences):
         sent = gensim.utils.simple_preprocess(str(sent), deacc=True)
         yield(sent)
 
+
+dictionary = corpora.Dictionary(df.token_NN_text)
+
+# filter words appear less than 15 docs & more than 0.5 documents & keep o
+dictionary.filter_extremes(no_below=15, no_above=0.5, keep_n=100000)
+
+# document to 'bow' BAG OF WORDS
+corpus = [dictionary.doc2bow(doc) for doc in df.token_NN_text]
+
+LDA = gensim.models.ldamodel.LdaModel
+
+# Build LDA model
+
+lda_model = LDA(corpus=corpus,
+                id2word=dictionary,
+                num_topics=30,
+                random_state=50,
+                update_every=1,
+                chunksize=100,
+                passes=10,
+                # alpha = "auto"
+                )
+import pyLDAvis.gensim_models as gensimvis
+
+vis_data = gensimvis.prepare(lda_model, corpus, dictionary)
+pyLDAvis.display(vis_data)
+
+html_string = pyLDAvis.prepared_data_to_html(vis_data)
+from streamlit import components
+
+components.v1.html(html_string, width=1300, height=800, scrolling=True)
