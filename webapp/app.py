@@ -96,7 +96,10 @@ with interactive:
     st.text('The improvement stops significantly improving after 9 topics')
 
 # TOPIC MODELLING
-    st.header('Topic Modelling plot is loading...')
+    st.header('While Topic Modelling plot is loading...'
+              'Check the topics keywords table')
+
+    st.image('Data_Viz/coherence_score_chart.png')
 
 # Tokenize Text
 def tokenize_text(text):
@@ -212,7 +215,7 @@ dictionary = corpora.Dictionary(final_posts)
 doc_term_matrix = [dictionary.doc2bow(doc) for doc in final_posts]
 
 Lda = gensim.models.ldamodel.LdaModel
-ldamodel = Lda(doc_term_matrix, num_topics=9, id2word = dictionary, passes=40,\
+ldamodel = Lda(doc_term_matrix, num_topics=10, id2word = dictionary, passes=40,\
                iterations=200,  chunksize = 10000, eval_every = None, random_state=0)
 
 import pyLDAvis.gensim_models as gensimvis
