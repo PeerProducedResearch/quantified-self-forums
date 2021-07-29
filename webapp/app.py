@@ -99,7 +99,7 @@ with interactive:
     st.header('While Topic Modelling plot is loading...'
               'Check the topics keywords table')
 
-    st.image('Data_Viz/coherence_score_chart.png')
+    st.image('Data_Viz/topic_model_words.png')
 
 # Tokenize Text
 def tokenize_text(text):
