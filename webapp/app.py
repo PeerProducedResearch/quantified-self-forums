@@ -96,7 +96,7 @@ with interactive:
     st.text('The improvement stops significantly improving after 9 topics')
 
 # TOPIC MODELLING
-
+    st.header('Topic Modelling plot is loading...')
 
 # Tokenize Text
 def tokenize_text(text):
@@ -146,6 +146,7 @@ trigram_pmi.columns = ['trigram', 'pmi']
 trigram_pmi.sort_values(by='pmi', axis=0, ascending=False, inplace = True)
 
 # Filter for bigrams with only noun-type structures
+@st.cache
 def bigram_filter(bigram):
     tag = nltk.pos_tag(bigram)
     if tag[0][1] not in ['JJ', 'NN'] and tag[1][1] not in ['NN']:
@@ -157,6 +158,7 @@ def bigram_filter(bigram):
     return True
 
              # Filter for trigrams with only noun-type structures
+@st.cache
 def trigram_filter(trigram):
     tag = nltk.pos_tag(trigram)
     if tag[0][1] not in ['JJ', 'NN'] and tag[1][1] not in ['JJ','NN']:
@@ -181,6 +183,7 @@ bigrams = [' '.join(x) for x in filtered_bigram.bigram.values if len(x[0]) > 2 o
 trigrams = [' '.join(x) for x in filtered_trigram.trigram.values if len(x[0]) > 2 or len(x[1]) > 2 and len(x[2]) > 2]
 
       # Concatenate n-grams
+@st.cache
 def replace_ngram(x):
     for gram in trigrams:
         x = x.replace(gram, '_'.join(gram.split()))
@@ -196,6 +199,7 @@ reviews_w_ngrams = reviews_w_ngrams.no_sw_LDA_text.map(lambda x: [word for word 
                                                  if  len(word) > 2])
 
 # Filter for only nouns
+@st.cache
 def noun_only(x):
     pos_comment = nltk.pos_tag(x)
     filtered = [word[0] for word in pos_comment if word[1] in ['NN']]
@@ -215,6 +219,7 @@ import pyLDAvis.gensim_models as gensimvis
 
 vis_data1 = gensimvis.prepare(ldamodel, doc_term_matrix, dictionary)
 pyLDAvis.display(vis_data1)
+
 
 html_string1 = pyLDAvis.prepared_data_to_html(vis_data1)
 from streamlit import components                                         
