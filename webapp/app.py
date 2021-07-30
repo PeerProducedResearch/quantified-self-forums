@@ -7,6 +7,8 @@ from gensim import corpora
 import gensim
 import pyLDAvis
 import nltk
+from sklearn.model_selection import GridSearchCV
+
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
 
@@ -119,6 +121,7 @@ df = df.groupby(['topic_id'], as_index=False).agg({('no_sw_LDA_text'): ' '.join}
 df['token_NN_text'] = df.no_sw_LDA_text.apply(lambda x: tokenize_text(x))
 
 
+
 # FUNCTIONS PREPROCESSING FOR TOPIC MODELLING
 
 # Example for detecting bigrams
@@ -218,12 +221,12 @@ Lda = gensim.models.ldamodel.LdaModel
 ldamodel = Lda(doc_term_matrix, num_topics=10, id2word = dictionary, passes=40,\
                iterations=200,  chunksize = 10000, eval_every = None, random_state=0)
 
-import pyLDAvis.gensim_models as gensimvis
+import pyLDAvis.gensim
 
-vis_data1 = gensimvis.prepare(ldamodel, doc_term_matrix, dictionary)
+vis_data1 = pyLDAvis.gensim.prepare(ldamodel, doc_term_matrix, dictionary)
 pyLDAvis.display(vis_data1)
 
 
 html_string1 = pyLDAvis.prepared_data_to_html(vis_data1)
-from streamlit import components                                         
+from streamlit import components
 components.v1.html(html_string1, width=1300, height=800, scrolling=True)
