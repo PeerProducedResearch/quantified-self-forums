@@ -1,7 +1,6 @@
 matplotlib==3.4.2
 numpy==1.20.3
 nltk==3.6.2
-notebook==6.4.0
 plotly==5.0.0
 pyldavis==3.3.1
 scikit-learn==0.24.2
@@ -15,3 +14,4 @@ streamlit~=0.85.1
 pandas~=1.2.4
 gensim~=4.0.1
 sklearn~=0.0
+pip == 21.2.1
