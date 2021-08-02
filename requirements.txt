@@ -2,7 +2,7 @@ matplotlib==3.4.2
 numpy==1.20.3
 nltk==3.6.2
 plotly==5.0.0
-pyldavis==3.3.1
+pyLDAvis==3.2.1
 scikit-learn==0.24.2
 spacy==3.0.6
 wordcloud==1.8.1
