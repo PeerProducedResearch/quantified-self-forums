@@ -221,10 +221,10 @@ Lda = gensim.models.ldamodel.LdaModel
 ldamodel = Lda(doc_term_matrix, num_topics=10, id2word = dictionary, passes=40,\
                iterations=200,  chunksize = 10000, eval_every = None, random_state=0)
 
-import pyLDAvis.gensim_models
+from pyLDAvis import gensim
 from gensim.models import LdaModel, HdpModel
 
-vis_data1 = pyLDAvis.gensim_models.prepare(ldamodel, doc_term_matrix, dictionary)
+vis_data1 = pyLDAvis.gensim.prepare(ldamodel, doc_term_matrix, dictionary)
 pyLDAvis.display(vis_data1)
 
 html_string1 = pyLDAvis.prepared_data_to_html(vis_data1)
