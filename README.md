@@ -11,6 +11,26 @@ Self-Quantified is a Community website of self-trackers, self-researchers intere
 ## Online Dashboard
 If you want to have closer look to the results click [INTERACTIVE DASHBOARD HERE](https://share.streamlit.io/kaoutarlanjri/quantified-self-forums/main/webapp/app.py) 
 
+## To run locally
+- 1st You need to install [streamlit](https://streamlit.io/) and [pandas](https://pandas.pydata.org/), [plotly](https://plotly.com/)
+
+Please install the project dependencies run pip install -r requirements.txt
+
+```
+$ pip install -r requirements.txt
+```
+
+
+- 2nd Please install [Pycharm](https://www.jetbrains.com/fr-fr/pycharm/) ， you can choose PyCharm Community Edition, it's free.
+
+- 3rd CE example:
+run on Pycharm terminal:
+
+```
+$ streamlit run webapp/app.py
+```
+
+
 ## Expected Results
 - The aim of this project is working to understand the community forum by conducting Data Analysis and Natural Language Processing (NLP) of the community’ interactions.
 - Providing transparent analysis of the human behaviour in communication and their patterns of networking to improve occurring and future projects in community and personal science.
