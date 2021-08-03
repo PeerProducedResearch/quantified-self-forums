@@ -43,7 +43,7 @@ $ streamlit run webapp/app.py
 * Network Social Analysis graph
 
 ## Technical Environment
-Main Platform: Python and CorTexT Platform. PythonLibraries used for pre-processing data:
-NLTK, SPACY, GENISM. * Libraries for modelling, data viz plLDAvis, sklearn, matplotlib, wordcloud, plotly, seaborn, requests, beautiful soup
-GEPHI-0.9.2 software for network analysis
+*  Platform: Python, CorTexT Platform, Pycharm, GEPHI-0.9.2 software for network analysis. 
+* PythonLibraries used for pre-processing data: NLTK, SPACY, GENISM.
+* Libraries for modelling, data viz plLDAvis, sklearn, matplotlib, wordcloud, plotly, seaborn, requests, beautiful soup
 
