@@ -17,12 +17,13 @@ import spacy
 from sklearn.decomposition import LatentDirichletAllocation
 from sklearn.feature_extraction.text import CountVectorizer
 from spacy import displacy
+from PIL import Image
 
 
 # containers
-header = st.beta_container()
-dataset = st.beta_container()
-interactive = st.beta_container()
+header = st.container()
+dataset = st.container()
+interactive = st.container()
 
 
 #SIDE BARS
@@ -30,7 +31,7 @@ TM = st.sidebar.checkbox('Topic Modelling')
 NER = st.sidebar.checkbox('NER: Named Entity Recognition')
 
 # data sets functions
-@st.cache
+@st.cache_data
 def get_data(filename):
     data = pd.read_csv(filename)
     return data
@@ -38,10 +39,16 @@ def get_data(filename):
 
 with header:
     st.title("NLP for Quantified-Self Forum")
-    st.subheader("This project will give an overview of Forum's interactions and offer an interactive dashboard"
+    st.subheader("Self-Quantified is a Community website of self-trackers, self-researchers interested in personal" 
+                 " science. It encourages all types of researches to post about their research, ask for advices"
+               "  and explore different methods of self-tracking through wearables."
+    
+                 " This project will analyze  the Website Forum's interactions and offer an interactive dashboard"
                  " to discover topics discussed about")
 
-    st.image('Data_Viz/qs_wordcloud.png')
+  #  image = Image.open('./Data_Viz/qs_wordcloud.png')
+
+   # st.image(image, caption='Wordcloud of Quantified self forum topics')
     st.sidebar.title("Side Menu")
     st.sidebar.write("-----------")
     st.sidebar.write("**Visualizations:** ")
