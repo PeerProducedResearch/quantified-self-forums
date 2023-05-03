@@ -2,29 +2,24 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 import plotly_express as px
-
 from gensim import corpora
 import gensim
 import pyLDAvis
 import nltk
-from sklearn.model_selection import GridSearchCV
-
+#from sklearn.model_selection import GridSearchCV
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
-
 from nltk import pos_tag, word_tokenize
-import spacy
-from sklearn.decomposition import LatentDirichletAllocation
-from sklearn.feature_extraction.text import CountVectorizer
-from spacy import displacy
-from PIL import Image
-
+#import spacy
+#from sklearn.decomposition import LatentDirichletAllocation
+#from sklearn.feature_extraction.text import CountVectorizer
+#from spacy import displacy
+#from PIL import Image
 
 # containers
 header = st.container()
 dataset = st.container()
 interactive = st.container()
-
 
 #SIDE BARS
 TM = st.sidebar.checkbox('Topic Modelling')
@@ -36,7 +31,6 @@ def get_data(filename):
     data = pd.read_csv(filename)
     return data
 
-
 with header:
     st.title("NLP for Quantified-Self Forum")
     st.subheader("Self-Quantified is a Community website of self-trackers, self-researchers interested in personal" 
@@ -45,7 +39,7 @@ with header:
     
                  " This project will analyze  the Website Forum's interactions and offer an interactive dashboard"
                  " to discover topics discussed about")
-
+  # to configure
   #  image = Image.open('./Data_Viz/qs_wordcloud.png')
 
    # st.image(image, caption='Wordcloud of Quantified self forum topics')
@@ -86,7 +80,6 @@ with interactive:
 
     fig = px.line(words_freq, x=words_freq.creation_year, y=words_freq.columns[0:30],
                   title="Word Dispersion over time 2011 to 2021")
-
     fig.update_xaxes(type='category')
     st.write(fig)
 
@@ -122,9 +115,7 @@ def tokenize_text(text):
 df = qs_data.copy()
 
 df['no_sw_LDA_text'] = df['no_sw_LDA_text'].astype('str')
-
 df = df.groupby(['topic_id'], as_index=False).agg({('no_sw_LDA_text'): ' '.join})
-
 df['token_NN_text'] = df.no_sw_LDA_text.apply(lambda x: tokenize_text(x))
 
 
