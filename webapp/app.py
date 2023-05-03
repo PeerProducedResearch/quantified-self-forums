@@ -94,14 +94,15 @@ with interactive:
     st.write(fig)
 
     st.header('Topic Modelling')
-    st.image('Data_Viz/coherence_score_chart.png')
+    #to configure
+   # st.image('Data_Viz/coherence_score_chart.png')
     st.text('The improvement stops significantly improving after 9 topics')
 
 # TOPIC MODELLING
     st.header('While Topic Modelling plot is loading...'
               'Check the topics keywords table')
-
-    st.image('Data_Viz/topic_model_words.png')
+    #to configure
+    #st.image('Data_Viz/topic_model_words.png')
     st.text('plot loading...')
 # Tokenize Text
 def tokenize_text(text):
